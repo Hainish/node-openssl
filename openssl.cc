@@ -22,7 +22,7 @@ class OpenSSL : ObjectWrap {
     ~OpenSSL();
 
     static Handle<Value> New(const Arguments& args);
-    static Handle<Value> OpenSSLTest(const Arguments& args);
+    static Handle<Value> AES128CtrEncrypt(const Arguments& args);
 };
 
 Persistent<FunctionTemplate> OpenSSL::constructor_template;
@@ -42,7 +42,7 @@ void OpenSSL::Initialize(v8::Handle<v8::Object> target) {
   constructor_template->InstanceTemplate()->SetInternalFieldCount(1);
   constructor_template->SetClassName(String::NewSymbol("OpenSSL"));
 
-        NODE_SET_PROTOTYPE_METHOD(constructor_template, "openssltest", OpenSSLTest);
+        NODE_SET_PROTOTYPE_METHOD(constructor_template, "aes128_ctr_encrypt", AES128CtrEncrypt);
 
   target->Set(String::NewSymbol("OpenSSL"), constructor_template->GetFunction());
 }
@@ -91,7 +91,7 @@ int init_ctr(struct ctr_state *state)
 }
 
 Handle<Value>
-OpenSSL::OpenSSLTest(const Arguments& args)
+OpenSSL::AES128CtrEncrypt(const Arguments& args)
 {
   HandleScope scope;
   
