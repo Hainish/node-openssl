@@ -10,19 +10,19 @@ using namespace node;
 using namespace std;
 
 class OpenSSL : ObjectWrap {
-	public:
-		static void Initialize(Handle<Object> target);
-		static Persistent<Function> js_conditioner;
-		static void SetJSConditioner(Persistent<Function> constructor);
+  public:
+    static void Initialize(Handle<Object> target);
+    static Persistent<Function> js_conditioner;
+    static void SetJSConditioner(Persistent<Function> constructor);
 
-	protected:
-		static Persistent<FunctionTemplate> constructor_template;
+  protected:
+    static Persistent<FunctionTemplate> constructor_template;
 
-		OpenSSL();
-		~OpenSSL();
+    OpenSSL();
+    ~OpenSSL();
 
-		static Handle<Value> New(const Arguments& args);
-		static Handle<Value> OpenSSLTest(const Arguments& args);
+    static Handle<Value> New(const Arguments& args);
+    static Handle<Value> OpenSSLTest(const Arguments& args);
 };
 
 Persistent<FunctionTemplate> OpenSSL::constructor_template;
@@ -30,21 +30,21 @@ Persistent<FunctionTemplate> OpenSSL::constructor_template;
 Persistent<Function> OpenSSL::js_conditioner;
 
 void OpenSSL::SetJSConditioner(Persistent<Function> constructor) {
-	js_conditioner = constructor;
+  js_conditioner = constructor;
 }
 
 void OpenSSL::Initialize(v8::Handle<v8::Object> target) {
-	HandleScope scope;
-	
-	Local<FunctionTemplate> t = FunctionTemplate::New(New);
-	constructor_template = Persistent<FunctionTemplate>::New(t);
+  HandleScope scope;
+  
+  Local<FunctionTemplate> t = FunctionTemplate::New(New);
+  constructor_template = Persistent<FunctionTemplate>::New(t);
 
-	constructor_template->InstanceTemplate()->SetInternalFieldCount(1);
-	constructor_template->SetClassName(String::NewSymbol("OpenSSL"));
+  constructor_template->InstanceTemplate()->SetInternalFieldCount(1);
+  constructor_template->SetClassName(String::NewSymbol("OpenSSL"));
 
         NODE_SET_PROTOTYPE_METHOD(constructor_template, "openssltest", OpenSSLTest);
 
-	target->Set(String::NewSymbol("OpenSSL"), constructor_template->GetFunction());
+  target->Set(String::NewSymbol("OpenSSL"), constructor_template->GetFunction());
 }
 
 OpenSSL::OpenSSL () : ObjectWrap ()
@@ -58,18 +58,18 @@ OpenSSL::~OpenSSL ()
 Handle<Value>
 OpenSSL::New(const Arguments& args)
 {
-	if(!args.IsConstructCall()) {
-		int len = args.Length();
-		Handle<Value>* newArgs = new Handle<Value>[len];
-		for(int i = 0; i < len; i++) {
-			newArgs[i] = args[i];
-		}
-		Handle<Value> newInst = constructor_template->GetFunction()->NewInstance(len, newArgs);
-		delete[] newArgs;
-		return newInst;
-	}
-	HandleScope scope;
-	return scope.Close(args.This());
+  if(!args.IsConstructCall()) {
+    int len = args.Length();
+    Handle<Value>* newArgs = new Handle<Value>[len];
+    for(int i = 0; i < len; i++) {
+      newArgs[i] = args[i];
+    }
+    Handle<Value> newInst = constructor_template->GetFunction()->NewInstance(len, newArgs);
+    delete[] newArgs;
+    return newInst;
+  }
+  HandleScope scope;
+  return scope.Close(args.This());
 }
 
 
@@ -137,18 +137,18 @@ OpenSSL::OpenSSLTest(const Arguments& args)
 static Handle<Value>
 SetJSConditioner(const Arguments& args)
 {
-	HandleScope scope;
+  HandleScope scope;
 
-	OpenSSL::SetJSConditioner(Persistent<Function>::New(Local<Function>::Cast(args[0])));
+  OpenSSL::SetJSConditioner(Persistent<Function>::New(Local<Function>::Cast(args[0])));
 
-	return Undefined();
+  return Undefined();
 }
 
 extern "C" void
 init (Handle<Object> target)
 {
-	HandleScope scope;
+  HandleScope scope;
 
-	OpenSSL::Initialize(target);
-	NODE_SET_METHOD(target, "setJSConditioner", SetJSConditioner);
+  OpenSSL::Initialize(target);
+  NODE_SET_METHOD(target, "setJSConditioner", SetJSConditioner);
 }
