@@ -1,15 +1,9 @@
-#include <stdint.h>
-#include <cstdio>
-#include <cstdlib>
 #include <cstring>
-#include <iostream>
 
 #include <v8.h>
 #include <node.h>
 #include <openssl/aes.h>
 #include <node_buffer.h>
-#include <map>
-#include <utility>
 
 using namespace v8;
 using namespace node;
