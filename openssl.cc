@@ -42,7 +42,8 @@ void OpenSSL::Initialize(v8::Handle<v8::Object> target) {
   constructor_template->InstanceTemplate()->SetInternalFieldCount(1);
   constructor_template->SetClassName(String::NewSymbol("OpenSSL"));
 
-        NODE_SET_PROTOTYPE_METHOD(constructor_template, "aes128_ctr_encrypt", AES128CtrEncrypt);
+  NODE_SET_PROTOTYPE_METHOD(constructor_template, "aes128_ctr_encrypt", AES128CtrEncrypt);
+  NODE_SET_PROTOTYPE_METHOD(constructor_template, "aes128_ctr_decrypt", AES128CtrEncrypt); // decryption and encryption work the same with ctr mode
 
   target->Set(String::NewSymbol("OpenSSL"), constructor_template->GetFunction());
 }
