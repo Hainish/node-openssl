@@ -9,6 +9,12 @@ using namespace v8;
 using namespace node;
 using namespace std;
 
+#define REQ_BUFF_ARG(I, VAR)              \
+  if (args.Length() <= (I) || !Buffer::HasInstance(args[I]))      \
+    return ThrowException(Exception::TypeError(                     \
+      String::New("Argument " #I " must be a buffer object"))); \
+  Local<Object> VAR = args[I]->ToObject();
+
 class OpenSSL : ObjectWrap {
   public:
     static void Initialize(Handle<Object> target);
@@ -97,13 +103,16 @@ OpenSSL::AES128CtrEncrypt(const Arguments& args)
   HandleScope scope;
   
   // Get passed in values into openssl unsigned char format
-  Local<Object> key_buff = args[0]->ToObject();
-  // Debug if keylen != 128
+  REQ_BUFF_ARG(0, key_buff);
+  if(Buffer::Length(key_buff) != 16){
+    return ThrowException(Exception::Error(   \
+	String::New("Key must be 128 bits (16 bytes) long")));
+  }
   char* key_buff_data = Buffer::Data(key_buff);
   unsigned char ckey[16];
   memcpy(ckey, key_buff_data, 16);
 
-  Local<Object> input_buff = args[1]->ToObject();
+  REQ_BUFF_ARG(1, input_buff);
   char* input_buff_data = Buffer::Data(input_buff);
   int input_length = Buffer::Length(input_buff);
   unsigned char input[input_length];
